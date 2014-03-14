@@ -1,7 +1,7 @@
 #
 #	`make messages`
 #
-LANGUAGES=en de fr ja pt ru zh es ko
+LANGUAGES=en de fr ja pt ru zh es ko tw
 MAC_DJANGO_ROOT=/Applications/GoogleAppEngineLauncher.app/Contents/Resources/GoogleAppEngine-default.bundle/Contents/Resources/google_appengine/lib/django-1.2
 <<<<<<< HEAD
 LINUX_DJANGO_ROOT=/usr/local/google/google_appengine/lib/django_1_2
