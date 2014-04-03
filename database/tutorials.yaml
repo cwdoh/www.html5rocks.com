@@ -12,6 +12,7 @@ tags:
 ---
 
 title: "Working with quota on modern browsers"
+subtitle: "A research report on browser storage"
 url: /tutorials/offline/quota-research/
 author_id: agektmr
 publication_date: 2014-01-23
@@ -2693,6 +2694,20 @@ url: /tutorials/developertools/chrome-33/
 author_id: umarhansa
 publication_date: 2014-01-05
 description: "Updates to the Chrome Developer Tools: async call stacks, edit locations, goto :line:column"
+browser_support:
+- chrome
+tags:
+- devtools
+- type:article
+
+---
+
+title: "Debugging Asynchronous JavaScript with Chrome DevTools"
+subtitle: ""
+url: /tutorials/developertools/async-call-stack/
+author_id: pearlchen
+publication_date: 2014-03-26
+description: "Up your JavaScript debugging kung fu with asynchronous call stack traces in the Chrome DevTools."
 browser_support:
 - chrome
 tags:
