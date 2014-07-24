@@ -1,4 +1,6 @@
-{% include "warning.html" %}
+<p class="notice warning" style="text-align:center">
+이 문서는 아직 완전히 표준화되지 않은 API에 대해 논의하고 있습니다. 실험실 기능의 API를 사용할 때는 충분한 주의를 기울이시기 바랍니다.
+</p>
 
 <h2 id="intro">소개</h2>
 
@@ -589,3 +591,4 @@ if (('createShadowRoot' in document.body || 'webkitCreateShadowRoot' in document
 
 }
 </script>
+
