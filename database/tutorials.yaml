@@ -2742,3 +2742,36 @@ browser_support:
 tags:
 - devtools
 - type:article
+
+---
+
+title: "Built-in Browser Support for Responsive Images"
+subtitle: ""
+url: /tutorials/responsive/picture-element/
+author_id: pearlchen
+publication_date: 2014-09-10
+description: "Take advantage of the new <picture> element and new features of <img> in your next responsive website."
+browser_support:
+- chrome
+- opera
+tags:
+- mobile
+- responsive
+- images
+- type:article
+
+---
+
+title: "Getting Started with CSS Shapes"
+url: /tutorials/shapes/getting-started/
+author_id: oslego
+publication_date: 2014-09-17
+description: "Wrapping content around custom paths with CSS Shapes."
+browser_support:
+- chrome
+- safari
+tags:
+- css
+- shapes
+- type:tutorial
+- class:presentation
