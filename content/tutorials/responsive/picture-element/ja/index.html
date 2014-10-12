@@ -42,6 +42,12 @@
 {% endblock %}
 
 {% block pagebreadcrumb %}{{ tut.title }}{% endblock %}
+
+{% block translator %}
+<div class="translator">
+  <strong>翻訳</strong>: <a href="https://profiles.google.com/myakura.web">Masataka Yakura</a>
+</div>
+{% endblock %}
   
 {% block content %}
 
@@ -297,7 +303,7 @@
 
 <h3 id="toc-additional-code-examples">コードサンプルAdditional code examples</h3>
 
-<p>Dev.Opera のブログ記事「<a href="http://dev.opera.com/articles/responsive-images/" target="_blank">Responsive Images: Use Cases and Documented Code Snippets to Get You Started</a>」では<code>&lt;picture&gt;</code> と <code>&lt;img&gt;</code> 要素、それに <code>srcset</code>、<code>media</code>、<code>sizes</code>、<code>type</code> 属性をそれぞれ組み合わせた例を網羅し紹介しています。</p>
+<p>Dev.Opera のブログ記事「<a href="http://dev.opera.com/articles/ja/responsive-images/" target="_blank">レスポンシブ・イメージ：ユースケースと入門用のコードサンプル</a>」では<code>&lt;picture&gt;</code> と <code>&lt;img&gt;</code> 要素、それに <code>srcset</code>、<code>media</code>、<code>sizes</code>、<code>type</code> 属性をそれぞれ組み合わせた例を網羅しています。</p>
 
 <h2 id="toc-try-it-out">使ってみよう</h2>
 
@@ -305,7 +311,7 @@
 
 <p>この機能へのフィードバックがあれば、<a href="http://crbug.com" target="_blank">Chrome バグトラッカー</a>までお願いします。</p>
 
-<p><code>&lt;picture&gt;</code> も使い、他のブラウザにもレスポンシブイメージを提供したい場合は、<a href="https://google-developers.appspot.com/web/fundamentals/resources/samples/media/images/media" target="_blank"><code>&lt;picture&gt;</code> と共に polyfill を使ったサンプル</a>がありますのでそちらをご覧ください。</p>
+<p><code>&lt;picture&gt;</code> も使い、他のブラウザにもレスポンシブイメージを提供したい場合は、<a href="http://googlesamples.github.io/web-fundamentals/samples/media/images/media.html" target="_blank"><code>&lt;picture&gt;</code> と共に polyfill を使ったサンプル</a>がありますのでそちらをご覧ください。</p>
 
 <p><a href="https://developers.google.com/web/fundamentals/media/images/" target="_blank">Web Fundamentals の画像についての記事</a>では、Web での画像の利用についてベストプラクティスや例が紹介されています。こちらもあわせてご覧ください。</p>
 
