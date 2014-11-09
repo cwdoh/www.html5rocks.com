@@ -275,20 +275,44 @@ elements.html
       };
 
       document.registerElement('say-hi', {prototype: proto});
-
-      // Define and register <shadow-element> that uses Shadow DOM.
-      var proto2 = Object.create(HTMLElement.prototype);
-
-      proto2.createdCallback = function() {
-        var root = this.createShadowRoot();
-        root.innerHTML = "<style>::content > *{color: red}</style>" +
-                         "I'm a " + this.localName +
-                         " using Shadow DOM!<content></content>";
-      };
-      document.registerElement('shadow-element', {prototype: proto2});
     </script>
 
-This import defines (and registers) two elements, `<say-hi>` and `<shadow-element>`. The importer can simply declare them on their page. No wiring needed.
+    <template id="t">
+      <style>
+        ::content > * {
+          color: red;
+        }
+      </style>
+      <span>I'm a shadow-element using Shadow DOM!</span>
+      <content></content>
+    </template>
+
+    <script>
+      (function() {
+        var importDoc = document.currentScript.ownerDocument; // importee
+
+        // Define and register <shadow-element>
+        // that uses Shadow DOM and a template.
+        var proto2 = Object.create(HTMLElement.prototype);
+
+        proto2.createdCallback = function() {
+          // get template in import
+          var template = importDoc.querySelector('#t');
+
+          // import template into
+          var clone = document.importNode(template.content, true);
+
+          var root = this.createShadowRoot();
+          root.appendChild(clone);
+        };
+
+        document.registerElement('shadow-element', {prototype: proto2});
+      })();
+    </script>
+
+This import defines (and registers) two elements, `<say-hi>` and `<shadow-element>`. The first shows a basic custom element that registers itself inside the import. The second example shows how to implement a custom element that creates Shadow DOM from a `<template>`, then registers itself. 
+  
+The best part about registering custom elements inside an HTML import is that the the importer simply declares your element on their page. No wiring needed.
 
 index.html
 
@@ -450,7 +474,20 @@ The same concept holds true for the import document. Unless you append it's cont
 
 <h3 id="perf-parsing">Optimizing for async loading</h3>
 
-**Imports don't block parsing of the main page**. Scripts inside imports are processed in order but don't block the importing page. This means you get defer-like behavior while maintaining proper script order. One benefit of putting your imports in the `<head>` is that it lets the parser start working on the content as soon as possible. With that said, it's critical to remember `<script>` in the main document *still* continues to block the page:
+<h4 id="perf-rendering">Imports block rendering</h4>
+
+_Imports block rendering of the main page_. This is similar to what `<link rel="stylesheet">` do. The reason the browser blocks rendering on stylesheets in the first place is to minimize FOUC. Imports behave similarly because they can contain stylsheets. 
+
+To be completely asynchronous and not block the parser or rendering, use the `async` attribute:
+
+    <link rel="import" href="/path/to/import_that_takes_5secs.html" async>
+
+The reason `async` isn't the default for HTML Imports is because it requires developers
+to do more work. Synchronous by default means that HTML Imports that have custom element definitions inside of them are guaranteed to load and upgrade, in order. In a completely async world, developers would have to manage that dance and upgrade timings themselves.
+
+<h4 id="perf-rendering">Imports do not block parsing</h4>
+
+_Imports don't block parsing of the main page_. Scripts inside imports are processed in order but don't block the importing page. This means you get defer-like behavior while maintaining proper script order. One benefit of putting your imports in the `<head>` is that it lets the parser start working on the content as soon as possible. With that said, it's critical to remember `<script>` in the main document *still* continues to block the page. The first `<script>` after an import will block page rendering. That's because an import can have script inside that needs to be executed before the script in the main page.
 
     <head>
       <link rel="import" href="/path/to/import_that_takes_5secs.html">

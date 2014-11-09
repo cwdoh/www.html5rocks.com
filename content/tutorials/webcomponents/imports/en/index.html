@@ -389,20 +389,43 @@ document.head.appendChild(link);
   };
 
   document.registerElement('say-hi', {prototype: proto});
+&lt;/script&gt;
 
-  // Define and register &lt;shadow-element&gt; that uses Shadow DOM.
-  var proto2 = Object.create(HTMLElement.prototype);
+&lt;template id="t"&gt;
+  &lt;style&gt;
+    ::content &gt; * {
+      color: red;
+    }
+  &lt;/style&gt;
+  &lt;span&gt;I'm a shadow-element using Shadow DOM!&lt;/span&gt;
+  &lt;content&gt;&lt;/content&gt;
+&lt;/template&gt;
 
-  proto2.createdCallback = function() {
-    var root = this.createShadowRoot();
-    root.innerHTML = "&lt;style&gt;::content &gt; *{color: red}&lt;/style&gt;" +
-                     "I'm a " + this.localName +
-                     " using Shadow DOM!&lt;content&gt;&lt;/content&gt;";
-  };
-  document.registerElement('shadow-element', {prototype: proto2});
+&lt;script&gt;
+  (function() {
+    var importDoc = document.currentScript.ownerDocument; // importee
+
+    // Define and register &lt;shadow-element&gt;
+    // that uses Shadow DOM and a template.
+    var proto2 = Object.create(HTMLElement.prototype);
+
+    proto2.createdCallback = function() {
+      // get template in import
+      var template = importDoc.querySelector('#t');
+
+      // import template into
+      var clone = document.importNode(template.content, true);
+
+      var root = this.createShadowRoot();
+      root.appendChild(clone);
+    };
+
+    document.registerElement('shadow-element', {prototype: proto2});
+  })();
 &lt;/script&gt;
 </code></pre>
-<p>This import defines (and registers) two elements, <code>&lt;say-hi&gt;</code> and <code>&lt;shadow-element&gt;</code>. The importer can simply declare them on their page. No wiring needed.</p>
+<p>This import defines (and registers) two elements, <code>&lt;say-hi&gt;</code> and <code>&lt;shadow-element&gt;</code>. The first shows a basic custom element that registers itself inside the import. The second example shows how to implement a custom element that creates Shadow DOM from a <code>&lt;template&gt;</code>, then registers itself. </p>
+<p>The best part about registering custom elements inside an HTML import is that the the importer simply declares your element on their page. No wiring needed.</p>
 <p>index.html</p>
 <pre class="prettyprint"><code>&lt;head&gt;
   &lt;link rel="import" href="elements.html"&gt;
@@ -537,7 +560,17 @@ h2.textContent = 'Booyah!';
 <p>The same concept holds true for the import document. Unless you append it's content to the DOM, it's a no-op. In fact, the only thing that "executes" in the import document directly is <code>&lt;script&gt;</code>. See <a href="#includejs">scripting in imports</a>.</p>
 <h3 id="perf-parsing">Optimizing for async loading</h3>
 
-<p><strong>Imports don't block parsing of the main page</strong>. Scripts inside imports are processed in order but don't block the importing page. This means you get defer-like behavior while maintaining proper script order. One benefit of putting your imports in the <code>&lt;head&gt;</code> is that it lets the parser start working on the content as soon as possible. With that said, it's critical to remember <code>&lt;script&gt;</code> in the main document <em>still</em> continues to block the page:</p>
+<h4 id="perf-rendering">Imports block rendering</h4>
+
+<p><em>Imports block rendering of the main page</em>. This is similar to what <code>&lt;link rel="stylesheet"&gt;</code> do. The reason the browser blocks rendering on stylesheets in the first place is to minimize FOUC. Imports behave similarly because they can contain stylsheets. </p>
+<p>To be completely asynchronous and not block the parser or rendering, use the <code>async</code> attribute:</p>
+<pre class="prettyprint"><code>&lt;link rel="import" href="/path/to/import_that_takes_5secs.html" async&gt;
+</code></pre>
+<p>The reason <code>async</code> isn't the default for HTML Imports is because it requires developers
+to do more work. Synchronous by default means that HTML Imports that have custom element definitions inside of them are guaranteed to load and upgrade, in order. In a completely async world, developers would have to manage that dance and upgrade timings themselves.</p>
+<h4 id="perf-rendering">Imports do not block parsing</h4>
+
+<p><em>Imports don't block parsing of the main page</em>. Scripts inside imports are processed in order but don't block the importing page. This means you get defer-like behavior while maintaining proper script order. One benefit of putting your imports in the <code>&lt;head&gt;</code> is that it lets the parser start working on the content as soon as possible. With that said, it's critical to remember <code>&lt;script&gt;</code> in the main document <em>still</em> continues to block the page. The first <code>&lt;script&gt;</code> after an import will block page rendering. That's because an import can have script inside that needs to be executed before the script in the main page.</p>
 <pre class="prettyprint"><code>&lt;head&gt;
   &lt;link rel="import" href="/path/to/import_that_takes_5secs.html"&gt;
   &lt;script&gt;console.log('I block page rendering');&lt;/script&gt;
