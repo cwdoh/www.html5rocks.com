@@ -3,18 +3,24 @@
 
 {% block pagebreadcrumb %}{{ tut.title }}{% endblock %}
 
+{% block translator %}
+<div class="translator">
+  <strong>Translator:</strong> <a href="http://cwdoh.com">도창욱 (Chang W. Doh)</a>
+</div>
+{% endblock %}
+
 {% block content %}
 
-<p>For a long time, web designers have been forced to create within the constraints of the rectangle. Most content on the web is still trapped in simple boxes because most creative ventures into non-rectangular layout end in frustration. That is about to change with the introduction of CSS Shapes, available starting with Chrome 37.</p>
-CSS Shapes allow web designers to wrap content around custom paths, like circles, ellipses and polygons, thus breaking free from the constraints of the rectangle.</p>
+<p>오랜동안 웹 디자이너들은 사각형의 제한 속에서 창조를 강요받았습니다. 사각형이 아닌 레이아웃으로의 모험은 대부분 실패로 끝나기 때문에 웹 상에서 대다수의 컨텐츠는 여전히 단순한 사각형에 사로잡혀 있습니다. 이제 크롬 37에서부터 사용이 가능해진 CSS Shapes 소개를 통해 사정은 달라질 것입니다.</p>
+CSS Shapes는 웹 디자이너들이 원이나 타원, 폴리곤과 같은 임의의 경로로 컨텐츠를 감쌀 수 있도록 하므로, 사각형의 제한으로부터 탈출할 수 있습니다.</p>
 
-<p>Shapes can be defined manually or they can be inferred from images.</p>
+<p>Shapes는 직접 정의하거나 이미지들로부터 추론되어질 수 있습니다.</p>
 
-<p>Let&#39;s look at a very simple example.</p>
+<p>아주 간단한 예제를 살펴보도록 하죠.</p>
 
-<p>Perhaps you&#39;ve been as naïve as me when first floating an image with transparent parts expecting the content to wrap and fill the gaps, only to be disappointed by the rectangular wrap shape persisting around the element. CSS Shapes can be used to solve this problem.</p>
+<p>아마도 여러분은 처음으로 투명한 영역을 가진 이미지를 띄우면서 다른 컨텐츠가 투명한 부분을 감싸듯이 채워줄 것이라고 예상했는데 결과적으로는 사각형 엘리먼트를 둘러싸고 있는듯한 형태에 실망할 수 밖에 없었던 저만큼이나 순진무구한 적이 있었을 것입니다. CSS Shapes는 이러한 문제를 해결하는데 사용할 수 있습니다.</p>
 
-<p><img src="espresso.jpg" alt="Extracting a shape from an image"></p>
+<p><img src="espresso.jpg" alt="이미지로부터 형태 추출하기"></p>
 
 <pre class="prettyprint">
 &lt;img class=”element” src=”image.png” /&gt;
@@ -29,23 +35,29 @@ CSS Shapes allow web designers to wrap content around custom paths, like circles
 &lt;/style&gt;
 </pre>
 
-<p>The <code>shape-outside: url(image.png)</code> CSS declaration tells the browser to extract a shape from the image.</p>
+<p>CSS 정의 <code>shape-outside: url(image.png)</code>는 브라우저에 이미지로부터 형태를 추출해야 한다는 것을 말해줍니다.</p>
 
-<p>The <code>shape-image-threshold</code> property defines the minimum opacity level of pixels that will be used to create the shape. Its value must be in the range between <code>0.0</code> (fully transparent) and <code>1.0</code> (fully opaque). So, <code>shape-image-threshold: 0.5</code> means that only pixels with opacity 50% and above will be used to create the shape.</p>
+<p><code>shape-image-threshold</code> 속성은 형태를 생성하는데 사용될 최소 픽셀 투명도를 정의합니다. 이는 반드시 <code>0.0</code> (완전 투명)과 <code>1.0</code> (완전 불투명) 사이의 값이어야 합니다. 따라서, <code>shape-image-threshold: 0.5</code>는 투명도가 50% 이상인 픽셀들만이 형태를 생성하는데 사용될 것임을 의미합니다.</p>
 
-<p>The <code>float</code> property is key here. While the <code>shape-outside</code> property defines the shape of the area around which content will wrap, without the float, you won&#39;t see the effects of the shape.</p>
+<p>여기서는 <code>float</code> 속성이 핵심입니다. float이 없다면 <code>shape-outside</code> 속성이 컨텐츠가 감쌀 주변 영역의 형태를 정의하기 때문에 모에 주는 영향을 확인하지 못할 것입니다.</p>
 
-<p>Elements have a float area on the opposite side of their <code>float</code> value. For example, if an element with a coffee cup image is being floated left, the float area will be created to the right of the cup. Even though you can engineer an image with gaps on both sides, content will only wrap around the shape on the opposite side designated by the float property, left or right, never both.</p>
+<p>float 영역을 가진 엘리먼트들은 자체적인 <code>float</code> 값의 반대편에 있는 떠있는(Float) 영역을 가지고 있습니다. 예를 들어 커피 컵 이미지를 가진 엘리먼트가 왼쪽에서 떠있다(float)면 떠있는 영역은 컵의 오른쪽으로 생성될 것입니다. 설령 여러분이 양쪽 모두에 여백을 가진 이미지를 만들 수 있다고 해도, 컨텐츠는 float 속성에 의해 왼쪽이나 오른쪽-절대 양쪽 모두는 아닙니다.-으로 지정된 반대편의 형태만을 감쌀 것입니다.</p>
 
-<p>In the future, it will be possible to use <code>shape-outside</code> on elements which are not floated with the introduction <a href="#toc-exclusions-disambiguation">CSS Exclusions</a>.</p>
+<p>
+<a href="#toc-exclusions-disambiguation">CSS Exclusions</a>의 채택을 통해 앞으로는 떠있지 않은 엘리먼트에서 <code>shape-outside</code>를 사용하는 것이 가능할 것입니다.
 
-<h2 id="toc-manual-shapes">Creating shapes manually</h2>
 
-<p>Beyond extracting shapes from images, you can also code them manually. You can choose from a few functional values to create shapes: <code>circle()</code>, <code>ellipse()</code>, <code>inset()</code> and <code>polygon()</code>. Each shape function accepts a set of coordinates and it is paired with a reference box which establishes the coordinate system. More about reference boxes in a moment.</p>
 
-<h2 id="toc-circle">The circle() function</h2>
 
-<p><img src="circle.png" alt="Illustration of the circle() shape value"></p>
+</p>
+
+<h2 id="toc-manual-shapes">수동 방식으로 형태 만들기</h2>
+
+<p>이미지로부터의 형태를 추출하기 위해서는 여러분이 또한 이를 직접 코딩해야 합니다. <code>circle()</code>, <code>ellipse()</code>, <code>inset()</code> 그리고 <code>polygon()</code>와 같은 형태를 생성하는 몇가지 함수의 값들 중에 고를 수 있을 것입니다. 각 형태 함수는 좌표계를 규정하는 참조 사각형과 쌍을 이루는 좌표들의 집합을 받습니다. 여기서 바로 참조 사각형들(Reference boxes)에 대해 알아보도록 하겠습니다.</p>
+
+<h2 id="toc-circle">circle() 함수</h2>
+
+<p><img src="circle.png" alt="circle() 형태 값에 대한 설명"></p>
 
 <p>The full notation for a circle shape value is <code>circle(r at cx cy)</code> where <code>r</code> is the radius of the circle, while <code>cx</code> and <code>cy</code> are coordinates of the circle center on the X-axis and Y-axis. The coordinates for the circle center are optional. If you omit them, the center of the element (the intersection of its diagonals) will be used as the default.</p>
 
